@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Enable responsive scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baby Land</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <style>
+    /* CSS Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      overflow-x: hidden;
+    }
+    header {
+      margin-bottom: 20px;
+      text-align: center;
+      animation: fadeIn 1s ease-in;
+      width: 100%;
+    }
+    header h1 {
+      font-size: 2.5em;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+    /* Search Bar Styles */
+    .search-input {
+      width: 90%;
+      max-width: 300px;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    /* CSS Grid Container for Product Boxes */
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease-in;
+    }
+    /* Product Card Styles */
+    .product-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px;
+      font-size: 0.9em;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .product-card.selected {
+      border: 2px solid #ff4081;
+    }
+    /* Styling for quantity input */
+    .qty-input {
+      width: 50px;
+      margin: 5px 0;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+      text-align: center;
+      font-size: 0.9em;
+    }
+    /* Styling for remove button */
+    .remove-btn {
+      background: #ff4081;
+      border: none;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.8em;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-bottom: 4px;
+    }
+    .remove-btn:hover {
+      background: #e0356a;
+    }
+    /* Order Summary Section */
+    .summary-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 1s ease-in;
+      width: 100%;
+    }
+    table {
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      width: 90%;
+      max-width: 500px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+      font-size: 0.9em;
+    }
+    th {
+      background: #a1c4fd;
+      color: #fff;
+    }
+    input[type="text"],
+    input[type="tel"],
+    textarea {
+      width: 90%;
+      max-width: 300px;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    .btn {
+      background: linear-gradient(135deg, #ff9a9e, #a1c4fd);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin: 10px;
+    }
+    .btn:hover {
+      background: linear-gradient(135deg, #a1c4fd, #ff9a9e);
+    }
+    /* Thank You Section */
+    .thankyou-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+      animation: fadeIn 1s ease-in;
+      padding: 20px;
+      width: 90%;
+    }
+    .thankyou-section h1 {
+      font-size: 2.5em;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    .thankyou-section p {
+      font-size: 1.1em;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Media Query: For very small screens */
+    @media (max-width: 600px) {
+      .product-container {
+        grid-template-columns: 1fr;
+      }
+      header h1 {
+        font-size: 2em;
+      }
+      .btn {
+        padding: 8px 16px;
+        font-size: 0.9em;
+      }
+      .search-input {
+        max-width: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Baby Land</h1>
+  </header>
+  
+  <!-- Product Selection Section -->
+  <section id="selection-section">
+    <!-- Search bar -->
+    <input type="text" id="searchBar" class="search-input" placeholder="Search Product Code">
+    <div class="product-container" id="productContainer">
+      <!-- Product cards will be generated dynamically using the productCodes array -->
+    </div>
+    <button class="btn" id="goSummary">Review Order</button>
+  </section>
+  
+  <!-- Order Summary Section -->
+  <section id="summary-section" class="summary-container">
+    <h2 style="color: #fff; margin-bottom: 20px;">Order Summary</h2>
+    <table id="orderTable">
+      <thead>
+        <tr>
+          <th>Product Code</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Order rows will be inserted here -->
+      </tbody>
+    </table>
+    <!-- Order Form -->
+    <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxxOTZaUrpHHcDXKidrjnX3vjzXwLUfoWjhgVQPTPie263_1MLbI_qZLtLWAwdPzeqTpA/exec" method="POST">
+      <input type="hidden" name="orderDetails" id="orderDetails">
+      <!-- Personal Information Fields -->
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="text" name="storeName" placeholder="Store Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="location" placeholder="Location" required>
+      <!-- Optional Fields -->
+      <input type="number" name="deposit" placeholder="Deposit Amount">
+      <textarea name="message" placeholder="Message (Optional)"></textarea>
+      <button type="submit" class="btn">Submit Order</button>
+    </form>
+    <button class="btn" id="backToSelection" style="background: rgba(0,0,0,0.4);">Back to Selection</button>
+  </section>
+  
+  <!-- Thank You Section -->
+  <section id="thankyou-section" class="thankyou-section">
+    <h1>Thank You!</h1>
+    <p>Your order has been successfully submitted.</p>
+    <p>We appreciate your business at Baby Land.</p>
+    <button class="btn" id="newOrderBtn">Place New Order</button>
+  </section>
+  
+  <script>
+    // Define the product codes array based on your provided list
+    const productCodes = [
+      "6761", "6991", "7025", "7127", "7247", "7334", "7418", "7419", "7557", "7575", "7577", "7578", "7579", "7581", "7583", "7584", "7637", "7638", "7639", "8088", "8224", "8291", "8394", "8402", "8412", "8413", "8414", "8415", "8416", "8420", "8421", "8422", "8424", "8428", "8429", "8442", "8443", "8444", "8454", "8479", "8500", "8688", "8690",
+    "8691", "8707", "8708", "8713", "8717", "8718", "8721", "8723", "8729", "8731", "8732", "8733", "8735", "8737", "8738", "8748", "8757", "8760", "8779", "8782", "8790", "8791", "8792", "8793", "8795", "8809", "8813", "8814", "8815", "8816", "8817", "8818", "8825", "8827", "8828", "8902", "8908", "8911", "8912", "8913", "8918", "8919", "8920",
+    "8923", "8934", "8935", "8945", "8948", "8950", "8951", "9187", "9188", "9189", "9190", "9191", "9192", "9193", "9194", "9196", "9198", "9221", "9222", "9223", "9224", "9225", "9226", "9227", "9228", "9229", "9230", "9231", "9232", "9233", "9234", "9235", "9236", "9237", "9238", "9239", "9240", "9241", "9242", "9243", "9244", "9245", "9246",
+    "9247", "9248", "9249", "9250", "9251", "9252", "9253", "9254", "9255", "9256", "9257", "9258", "9259", "9260", "9261", "9262", "9263", "9264", "9265", "9266", "9267", "9268", "9269", "9270", "9271", "9272", "9273", "9274", "9275", "9276", "9277", "9278", "9279", "9280", "9281", "9282", "9283", "9284", "9285", "9286", "9287", "9288", "9289",
+    "9290", "9291", "9292", "9293", "9294", "9295", "9296", "9297", "9298", "9299", "9300", "9301", "9302", "9303", "9304", "9305", "9306", "9307", "9308", "9309", "9310", "9311", "9312", "9329", "9330", "9331", "9332", "9333", "9341", "9342", "9343", "9344", "9345", "9346", "9347", "9348", "9358", "9359", "9360", "9361", "9362", "9363", "9364",
+    "9364", "9365", "9366", "9367", "9368", "9369", "9370", "9371", "9372", "9373", "9374", "9375", "9376", "9377", "9378", "9379", "9380", "9381", "9382", "9383", "9384", "9385", "9386", "9387", "9388", "9389", "9390", "9391", "9392", "9393", "9394", "9395", "9396", "9397", "9398", "9399", "9400", "9401", "9402", "9403", "9404", "9405", "9406",
+    "9407", "9408", "9409", "9410", "9411", "9412", "9413", "9414", "9415", "9416", "9417", "9418", "9419", "9420", "9421", "9422", "9423", "9424", "9425", "9426", "9427", "9428", "9429", "9430", "9431", "9432", "9433", "9434", "9435", "9436", "9437", "9438", "9439", "9440", "9441", "9442", "9443", "9444", "9445", "9446", "9447", "9448", "9449",
+    "9450", "9451", "9452", "9453", "9454", "9455", "9456", "9457", "9458", "9459", "9460", "9461", "9462", "9463", "9464", "9465", "9466", "9467", "9468", "9469", "9470", "9471", "9472", "9473", "9474", "9475", "9476", "9477", "9478", "9479", "9480", "9481", "9482", "9483", "9484", "9485", "9486", "9487", "9488", "9489", "9490", "9491", "9492",
+    "9493", "9494", "9495", "9496", "9497", "9498", "9499", "9500", "9501", "9502", "9503", "9504", "9505", "9506", "9507", "9508", "9509", "9510", "9511", "9512", "9513", "9514", "9515", "9516", "9517", "9518", "9519", "9520", "9521", "9522", "9523", "9524", "9525", "9526", "9527", "9528", "9529", "9530", "9531", "9532", "9533", "9534", "9535"
+    ];
+
+    const productContainer = document.getElementById('productContainer');
+    let order = {};
+
+    function updateOrder(productCode, quantity, card) {
+      if (quantity > 0) {
+        order[productCode] = quantity;
+        card.classList.add('selected');
+      } else {
+        delete order[productCode];
+        card.classList.remove('selected');
+      }
+    }
+
+    function loadProducts() {
+      productCodes.forEach(code => {
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.dataset.code = code;
+
+        const codeDisplay = document.createElement('div');
+        codeDisplay.textContent = "Code " + code;
+        codeDisplay.style.fontWeight = 'bold';
+        codeDisplay.style.fontSize = '1.2em';
+        card.appendChild(codeDisplay);
+
+        const qtyInput = document.createElement('input');
+        qtyInput.type = 'number';
+        qtyInput.min = '0';
+        qtyInput.value = '0';
+        qtyInput.classList.add('qty-input');
+        card.appendChild(qtyInput);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove';
+        removeBtn.classList.add('remove-btn');
+        card.appendChild(removeBtn);
+
+        qtyInput.addEventListener('change', () => {
+          const quantity = parseInt(qtyInput.value) || 0;
+          updateOrder(code, quantity, card);
+        });
+
+        removeBtn.addEventListener('click', () => {
+          qtyInput.value = '0';
+          updateOrder(code, 0, card);
+        });
+
+        productContainer.appendChild(card);
+      });
+    }
+    loadProducts();
+
+    const searchBar = document.getElementById('searchBar');
+    searchBar.addEventListener('keyup', (e) => {
+      const query = e.target.value.trim();
+      if (query) {
+        const foundCard = productContainer.querySelector(`[data-code="${query}"]`);
+        if (foundCard) {
+          foundCard.scrollIntoView({ behavior: "smooth", block: "center" });
+          foundCard.style.border = "3px solid #FFD700";
+          setTimeout(() => {
+            foundCard.style.border = "";
+          }, 2000);
+        }
+      }
+    });
+
+    function updateAllInputs() {
+      document.querySelectorAll('.qty-input').forEach(input => {
+        const card = input.parentElement;
+        const code = card.dataset.code;
+        const quantity = parseInt(input.value) || 0;
+        updateOrder(code, quantity, card);
+      });
+    }
+
+    const goSummaryBtn = document.getElementById('goSummary');
+    const selectionSection = document.getElementById('selection-section');
+    const summarySection = document.getElementById('summary-section');
+    const orderTableBody = document.getElementById('orderTable').querySelector('tbody');
+    const orderDetailsInput = document.getElementById('orderDetails');
+
+    goSummaryBtn.addEventListener('click', () => {
+      updateAllInputs();
+      orderTableBody.innerHTML = '';
+      for (const code in order) {
+        if (order.hasOwnProperty(code)) {
+          const row = document.createElement('tr');
+          const codeCell = document.createElement('td');
+          codeCell.textContent = "Code " + code;
+          const qtyCell = document.createElement('td');
+          qtyCell.textContent = order[code];
+          row.appendChild(codeCell);
+          row.appendChild(qtyCell);
+          orderTableBody.appendChild(row);
+        }
+      }
+      orderDetailsInput.value = JSON.stringify(order);
+      selectionSection.style.display = 'none';
+      summarySection.style.display = 'flex';
+    });
+
+    const backBtn = document.getElementById('backToSelection');
+    backBtn.addEventListener('click', () => {
+      summarySection.style.display = 'none';
+      selectionSection.style.display = 'block';
+    });
+
+    const orderForm = document.getElementById('orderForm');
+    orderForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(orderForm);
+      fetch(orderForm.action, {
+         method: 'POST',
+         body: formData
+      })
+      .then(response => response.text())
+      .then(data => {
+         summarySection.style.display = 'none';
+         document.getElementById('thankyou-section').style.display = 'flex';
+      })
+      .catch(error => {
+         console.error("Error submitting form:", error);
+         alert("Error submitting your order. Please try again.");
+      });
+    });
+
+  const ua = navigator.userAgent;
+  if (ua.includes("Safari") && !ua.includes("Chrome")) {
+    // Safari detected
+    window.location.href = "https://mini-me99.github.io/oeders/open-in-chrome.html";
+  }
+
+    const newOrderBtn = document.getElementById('newOrderBtn');
+    newOrderBtn.addEventListener('click', () => {
+      location.reload();
+    });
+  </script>
+</body>
+</html>
