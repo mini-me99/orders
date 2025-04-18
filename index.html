@@ -5,6 +5,17 @@
   <!-- Enable responsive scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Baby Land</title>
+
+<script>
+  window.onload = function () {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      document.body.innerHTML = ""; // Clear page
+      window.location.href = "https://mini-me99.github.io/BabYland-/=open+this+site+in+chrome";
+    }
+  };
+</script>
+
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
   <style>
     /* CSS Reset */
@@ -387,12 +398,6 @@
          alert("Error submitting your order. Please try again.");
       });
     });
-
-  const ua = navigator.userAgent;
-  if (ua.includes("Safari") && !ua.includes("Chrome")) {
-    // Safari detected
-    window.location.href = "https://mini-me99.github.io/oeders/open-in-chrome.html";
-  }
 
     const newOrderBtn = document.getElementById('newOrderBtn');
     newOrderBtn.addEventListener('click', () => {
