@@ -5,17 +5,6 @@
   <!-- Enable responsive scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Baby Land</title>
-
-<script>
-  window.onload = function () {
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    if (isSafari) {
-      document.body.innerHTML = ""; // Clear page
-      window.location.href = "https://mini-me99.github.io/BabYland-/=open+this+site+in+chrome";
-    }
-  };
-</script>
-
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
   <style>
     /* CSS Reset */
@@ -208,6 +197,7 @@
 <body>
   <header>
     <h1>Baby Land</h1>
+    <h1>برجاء فتح الموقع من جوجل فقط خد اللينك كوبي و روح علي جوجل https://mini-me99.github.io/BabYland-/</h1>
   </header>
   
   <!-- Product Selection Section -->
@@ -226,8 +216,8 @@
     <table id="orderTable">
       <thead>
         <tr>
-          <th>Product Code</th>
-          <th>Quantity</th>
+          <th>الكود</th>
+          <th>العدد</th>
         </tr>
       </thead>
       <tbody>
@@ -238,13 +228,13 @@
     <form id="orderForm" action="https://script.google.com/macros/s/AKfycbxxOTZaUrpHHcDXKidrjnX3vjzXwLUfoWjhgVQPTPie263_1MLbI_qZLtLWAwdPzeqTpA/exec" method="POST">
       <input type="hidden" name="orderDetails" id="orderDetails">
       <!-- Personal Information Fields -->
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="text" name="storeName" placeholder="Store Name" required>
-      <input type="tel" name="phone" placeholder="Phone Number" required>
-      <input type="text" name="location" placeholder="Location" required>
+      <input type="text" name="name" placeholder="الاسم" required>
+      <input type="text" name="storeName" placeholder="اسم المحل" required>
+      <input type="tel" name="phone" placeholder="رقم التليفون" required>
+      <input type="text" name="location" placeholder="العنوان" required>
       <!-- Optional Fields -->
-      <input type="number" name="deposit" placeholder="Deposit Amount">
-      <textarea name="message" placeholder="Message (Optional)"></textarea>
+      <input type="number" name="deposit" placeholder="العربون">
+      <textarea name="message" placeholder="المزيد من المعلومات (اختياري)"></textarea>
       <button type="submit" class="btn">Submit Order</button>
     </form>
     <button class="btn" id="backToSelection" style="background: rgba(0,0,0,0.4);">Back to Selection</button>
